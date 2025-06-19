@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import InvoiceForm from "./pages/InvoiceForm";
 import InvoicePage from "./pages/InvoicePage"; // or InvoicePDFPreview
+import './App.css';
 
 function App() {
   // State to hold submitted invoice data
