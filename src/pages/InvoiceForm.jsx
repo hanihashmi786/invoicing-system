@@ -233,6 +233,7 @@ export default function InvoiceForm({ onSubmit }) {
         phone: form.client_phone,
         fax: form.client_fax,
         email: form.client_email,
+        vat_registration: form.client_vat_registration,  
       },
       items,
     }
@@ -298,6 +299,7 @@ export default function InvoiceForm({ onSubmit }) {
         phone: form.client_phone,
         fax: form.client_fax,
         email: form.client_email,
+        vat_registration: form.client_vat_registration,
       },
       project: projectIdToUse ? projectIdToUse : null,
       items,
@@ -625,6 +627,17 @@ export default function InvoiceForm({ onSubmit }) {
                     value={form.client_fax}
                     onChange={handleChange}
                     placeholder={t.fax}
+                    className="form-input"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">VAT Registration</label>
+                  <input
+                    type="text"
+                    name="client_vat_registration"
+                    value={form.client_vat_registration}
+                    onChange={handleChange}
+                    placeholder="VAT Registration Number"
                     className="form-input"
                   />
                 </div>

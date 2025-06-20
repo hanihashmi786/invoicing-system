@@ -156,6 +156,46 @@
   color: white;
 }
 
+/* PDF Download Button */
+.pdf-download-container {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 50;
+}
+
+@media print {
+  .pdf-download-container {
+    display: none;
+  }
+}
+
+.pdf-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.pdf-download-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.pdf-download-btn:active {
+  transform: translateY(0);
+}
+
 /* No data styles */
 .no-data-container {
   min-height: 100vh;
@@ -227,6 +267,83 @@
   border-bottom: 2px solid #2563eb;
 }
 
+/* Fix Arabic alignment - push to far right */
+.company-details-right {
+  text-align: right;
+  padding-left: 2rem; /* Add padding to push content away from center */
+  margin-left: auto; /* Push the entire block to the right */
+}
+
+/* Fix Arabic content alignment when in AR mode - Arabic content appears on left but needs to be flush left */
+.rtl .company-details-right {
+  padding-left: 0;
+  margin-left: 0;
+  padding-right: 2rem;
+  margin-right: auto;
+  text-align: left;
+}
+
+/* Fix signature section alignment in AR mode */
+.rtl .signature-section:first-child {
+  text-align: left !important;
+  padding-right: 1rem;
+  margin-right: auto;
+}
+
+.rtl .signature-section:last-child {
+  text-align: right !important;
+  padding-left: 1rem;
+  margin-left: auto;
+}
+
+/* Override all signature content alignment in RTL */
+.rtl .signature-section:first-child * {
+  text-align: left !important;
+}
+
+.rtl .signature-section:last-child * {
+  text-align: right !important;
+}
+
+/* Ensure stamp container aligns properly in RTL */
+.rtl .signature-section:first-child .stamp-container {
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+.rtl .signature-section:first-child .stamp-placeholder {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+/* Override the center alignment for signature content in RTL */
+/*
+.rtl .signature-section:first-child .signature-info {
+  text-align: left !important;
+}
+
+.rtl .signature-section:last-child .signature-info {
+  text-align: right !important;
+}
+
+.rtl .signature-section:first-child .signature-name,
+.rtl .signature-section:first-child .signature-title,
+.rtl .signature-section:first-child .signature-label {
+  text-align: left !important;
+}
+
+.rtl .signature-section:last-child .signature-name,
+.rtl .signature-section:last-child .signature-title,
+.rtl .signature-section:last-child .signature-label {
+  text-align: right !important;
+}
+*/
+/* Align stamp container to the left in RTL mode */
+/*
+.rtl .signature-section:first-child .stamp-container {
+  justify-content: flex-start !important;
+}
+*/
 .company-name {
   font-size: 0.9rem; /* Reduced from 1rem */
   font-weight: 700;
@@ -270,8 +387,8 @@
 
 .logo-wrapper {
   position: relative;
-  width: 4rem; /* Increased from 3rem */
-  height: 4rem; /* Increased from 3rem */
+  width: 7rem; /* Increased from 3rem */
+  height: 7rem; /* Increased from 3rem */
   background-color: #f9fafb;
   border-radius: 0.5rem;
   border: 1px solid #e5e7eb;
@@ -610,6 +727,10 @@
 /* Print styles */
 @media print {
   .language-toggle {
+    display: none !important;
+  }
+
+  .pdf-download-container {
     display: none !important;
   }
 

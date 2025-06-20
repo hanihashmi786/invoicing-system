@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import html2pdf from "html2pdf.js"
 import "../styles/InvoicePage.css"
 
 export default function InvoicePage({ invoiceData, language = "en" }) {
@@ -35,6 +36,41 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
     return date.toLocaleDateString("en-GB")
   }
 
+  const downloadPDF = () => {
+    const element = document.querySelector(".invoice-page")
+    const opt = {
+      margin: [0.3, 0.3, 0.3, 0.3],
+      filename: `invoice-${invoiceData.invoice_number}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 1.5,
+        useCORS: true,
+        height: element.scrollHeight,
+        windowHeight: element.scrollHeight,
+      },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+        compress: true,
+      },
+      pagebreak: { mode: "avoid-all" },
+    }
+
+    // Hide the PDF button during generation
+    const pdfButton = document.querySelector(".pdf-download-btn")
+    if (pdfButton) pdfButton.style.display = "none"
+
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .save()
+      .then(() => {
+        // Show the PDF button again after generation
+        if (pdfButton) pdfButton.style.display = "block"
+      })
+  }
+
   return (
     <div className="invoice-container">
       {/* Language Toggle - Hidden in Print */}
@@ -53,6 +89,18 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
             AR
           </button>
         </div>
+      </div>
+
+      {/* PDF Download Button */}
+      <div className="pdf-download-container">
+        <button onClick={downloadPDF} className="pdf-download-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7,10 12,15 17,10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download PDF
+        </button>
       </div>
 
       {/* A4 Container */}
@@ -81,11 +129,7 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
               {/* Center Column - Company Logo */}
               <div className="logo-container">
                 <div className="logo-wrapper">
-                  <img
-                    src="../../assets/images/OCE.jpg"
-                    alt="Company Logo"
-                    className="company-logo"
-                  />
+                  <img src="../../assets/images/OCE.jpg" alt="Company Logo" className="company-logo" />
                 </div>
               </div>
 
@@ -147,6 +191,14 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
                   <div className="info-row">
                     <span className="info-label">{isRTL ? "الفاكس:" : "Fax:"}</span>
                     <span className="info-value">{invoiceData.client.fax}</span>
+                  </div>
+                )}
+                {invoiceData.client.vat_registration && (
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-600 font-medium">
+                      {isRTL ? "تسجيل ضريبة القيمة المضافة:" : "VAT Registration:"}
+                    </span>
+                    <span className="text-gray-900">{invoiceData.client.vat_registration}</span>
                   </div>
                 )}
               </div>
