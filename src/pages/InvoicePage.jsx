@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import "../styles/InvoicePage.css"
 
 export default function InvoicePage({ invoiceData, language = "en" }) {
   const [currentLang, setCurrentLang] = useState(language)
@@ -9,10 +10,10 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
   // Show a message if no data is available (important for debugging!)
   if (!invoiceData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded shadow text-center">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">No Invoice Data Available</h2>
-          <p className="text-gray-500">Please submit an invoice to view its details.</p>
+      <div className="no-data-container">
+        <div className="no-data-card">
+          <h2 className="no-data-title">No Invoice Data Available</h2>
+          <p className="no-data-message">Please submit an invoice to view its details.</p>
         </div>
       </div>
     )
@@ -35,23 +36,19 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 print:bg-white">
+    <div className="invoice-container">
       {/* Language Toggle - Hidden in Print */}
-      <div className="fixed top-4 right-4 z-50 print:hidden">
-        <div className="flex gap-1 bg-white rounded-lg shadow-sm border border-gray-200 p-1">
+      <div className="language-toggle">
+        <div className="language-toggle-buttons">
           <button
             onClick={() => setCurrentLang("en")}
-            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
-              currentLang === "en" ? "bg-blue-600 text-white" : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`language-btn ${currentLang === "en" ? "language-btn-active" : ""}`}
           >
             EN
           </button>
           <button
             onClick={() => setCurrentLang("ar")}
-            className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
-              currentLang === "ar" ? "bg-blue-600 text-white" : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`language-btn ${currentLang === "ar" ? "language-btn-active" : ""}`}
           >
             AR
           </button>
@@ -59,138 +56,123 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
       </div>
 
       {/* A4 Container */}
-      <div
-        className={`max-w-[210mm] mx-auto bg-white shadow-lg print:shadow-none print:max-w-none ${isRTL ? "rtl" : "ltr"}`}
-        dir={isRTL ? "rtl" : "ltr"}
-        style={{ minHeight: "297mm" }}
-      >
-        <div className="p-6 print:p-4">
+      <div className={`invoice-page ${isRTL ? "rtl" : "ltr"}`} dir={isRTL ? "rtl" : "ltr"}>
+        <div className="invoice-content">
           {/* Header Section */}
-          <header className="mb-6">
-            <div className="grid grid-cols-3 gap-4 items-center pb-4 border-b-2 border-blue-600">
+          <header className="invoice-header">
+            <div className="header-grid">
               {/* Left Column - English Company Details */}
-              <div className="text-left">
-                <h1 className="text-lg font-bold text-gray-900 mb-1 leading-tight">{invoiceData.company.name}</h1>
-                <p className="text-sm font-semibold text-blue-600 mb-2">Engineering Consulting Co.</p>
-                <div className="text-xs text-gray-600 space-y-0.5">
+              <div className="company-details-left">
+                <h1 className="company-name">{invoiceData.company.name}</h1>
+                <p className="company-subtitle">Engineering Consulting Co.</p>
+                <div className="company-info">
                   <p>Riyadh, Saudi Arabia</p>
                   <p>P.O. Box 12345</p>
                   <p>{invoiceData.company.phone}</p>
                   <p>{invoiceData.company.email}</p>
                 </div>
-                <div className="text-xs text-gray-500 mt-2 space-y-0.5">
-                  <p>CR: 1010691625</p>
-                  <p>License: 5100001331</p>
+                <div className="company-registration">
+                  <p>CR: {invoiceData.company.cr_number || "1010000000"}</p>
+                  <p>License: {invoiceData.company.license_number || "40030000"}</p>
                   <p>CC: 625262</p>
                 </div>
               </div>
 
               {/* Center Column - Company Logo */}
-              <div className="flex justify-center">
-                <div className="relative w-16 h-16 bg-gray-50 rounded-lg border border-gray-200 p-2">
+              <div className="logo-container">
+                <div className="logo-wrapper">
                   <img
-                    src="/placeholder.svg?height=64&width=64"
+                    src="../../assets/images/OCE.jpg"
                     alt="Company Logo"
-                    className="w-full h-full object-contain"
+                    className="company-logo"
                   />
                 </div>
               </div>
 
               {/* Right Column - Arabic Company Details */}
-              <div className="text-right">
-                <h1 className="text-lg font-bold text-gray-900 mb-1 leading-tight">{invoiceData.company.name_ar}</h1>
-                <p className="text-sm font-semibold text-blue-600 mb-2">للاستشارات الهندسية</p>
-                <div className="text-xs text-gray-600 space-y-0.5">
+              <div className="company-details-right">
+                <h1 className="company-name">{invoiceData.company.name_ar || "للاستشارات الهندسية"}</h1>
+                <p className="company-subtitle">للاستشارات الهندسية</p>
+                <div className="company-info">
                   <p>الرياض، المملكة العربية السعودية</p>
                   <p>ص.ب ١٢٣٤٥</p>
                   <p>{invoiceData.company.phone}</p>
                   <p>{invoiceData.company.email}</p>
                 </div>
-                <div className="text-xs text-gray-500 mt-2 space-y-0.5">
-                <p>س.ت: 1010691625</p>
-                <p>ترخيص: 5100001331</p>
-                <p>غرفة: 625262</p>
+                <div className="company-registration">
+                  <p>س.ت: {invoiceData.company.cr_number || "1010000000"}</p>
+                  <p>ترخيص: {invoiceData.company.license_number || "40030000"}</p>
+                  <p>غرفة: 625262</p>
                 </div>
               </div>
             </div>
 
             {/* Invoice Title */}
-            <div className="text-center mt-3 mb-4">
-              <h2 className="text-xl font-bold text-blue-600 bg-blue-50 py-2 px-4 rounded border border-blue-200">
-                {isRTL ? "فاتورة ضريبية • TAX INVOICE" : "TAX INVOICE • فاتورة ضريبية"}
-              </h2>
+            <div className="invoice-title-container">
+              <h2 className="invoice-title">{isRTL ? "فاتورة ضريبية • TAX INVOICE" : "TAX INVOICE • فاتورة ضريبية"}</h2>
             </div>
           </header>
 
           {/* Client and Invoice Information */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="info-grid">
             {/* Client Information */}
-            <div className="bg-gray-50 border border-gray-200 rounded">
-              <div className="bg-green-50 border-b border-green-200 px-3 py-2">
-                <h3 className="text-sm font-bold text-gray-800">
+            <div className="info-card">
+              <div className="info-card-header client-header">
+                <h3 className="info-card-title">
                   {isRTL ? "معلومات العميل • Client Information" : "Client Information • معلومات العميل"}
                 </h3>
               </div>
-              <div className="p-3 space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-600 font-medium">{isRTL ? "اسم العميل:" : "Client Name:"}</span>
-                  <span className="text-gray-900 font-medium">
-                    {isRTL && invoiceData.client.name_ar ? invoiceData.client.name_ar : invoiceData.client.name}
-                  </span>
+              <div className="info-card-content">
+                <div className="info-row">
+                  <span className="info-label">{isRTL ? "اسم العميل:" : "Client Name:"}</span>
+                  <span className="info-value">{invoiceData.client.name}</span>
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-600 font-medium">{isRTL ? "العنوان:" : "Address:"}</span>
-                  <span className="text-gray-900 text-right max-w-xs">
-                    {isRTL && invoiceData.client.address_ar
-                      ? invoiceData.client.address_ar
-                      : invoiceData.client.address}
-                  </span>
+                <div className="info-row">
+                  <span className="info-label">{isRTL ? "العنوان:" : "Address:"}</span>
+                  <span className="info-value address-value">{invoiceData.client.address}</span>
                 </div>
                 {invoiceData.client.phone && (
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 font-medium">{isRTL ? "الهاتف:" : "Phone:"}</span>
-                    <span className="text-gray-900">{invoiceData.client.phone}</span>
+                  <div className="info-row">
+                    <span className="info-label">{isRTL ? "الهاتف:" : "Phone:"}</span>
+                    <span className="info-value">{invoiceData.client.phone}</span>
                   </div>
                 )}
                 {invoiceData.client.email && (
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 font-medium">{isRTL ? "البريد الإلكتروني:" : "Email:"}</span>
-                    <span className="text-gray-900">{invoiceData.client.email}</span>
+                  <div className="info-row">
+                    <span className="info-label">{isRTL ? "البريد الإلكتروني:" : "Email:"}</span>
+                    <span className="info-value">{invoiceData.client.email}</span>
                   </div>
                 )}
-                {invoiceData.client.tax_number && (
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 font-medium">{isRTL ? "الرقم الضريبي:" : "Tax Number:"}</span>
-                    <span className="text-gray-900 font-mono">{invoiceData.client.tax_number}</span>
+                {invoiceData.client.fax && (
+                  <div className="info-row">
+                    <span className="info-label">{isRTL ? "الفاكس:" : "Fax:"}</span>
+                    <span className="info-value">{invoiceData.client.fax}</span>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Invoice Information */}
-            <div className="bg-gray-50 border border-gray-200 rounded">
-              <div className="bg-blue-50 border-b border-blue-200 px-3 py-2">
-                <h3 className="text-sm font-bold text-gray-800">
+            <div className="info-card">
+              <div className="info-card-header invoice-header-info">
+                <h3 className="info-card-title">
                   {isRTL ? "معلومات الفاتورة • Invoice Information" : "Invoice Information • معلومات الفاتورة"}
                 </h3>
               </div>
-              <div className="p-3 space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-600 font-medium">{isRTL ? "رقم الفاتورة:" : "Invoice Number:"}</span>
-                  <span className="text-blue-600 font-bold">{invoiceData.invoice_number}</span>
+              <div className="info-card-content">
+                <div className="info-row">
+                  <span className="info-label">{isRTL ? "رقم الفاتورة:" : "Invoice Number:"}</span>
+                  <span className="info-value invoice-number">{invoiceData.invoice_number}</span>
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-600 font-medium">{isRTL ? "تاريخ الفاتورة:" : "Invoice Date:"}</span>
-                  <span className="text-gray-900">{formatDate(invoiceData.invoice_date)}</span>
+                <div className="info-row">
+                  <span className="info-label">{isRTL ? "تاريخ الفاتورة:" : "Invoice Date:"}</span>
+                  <span className="info-value">{formatDate(invoiceData.invoice_date)}</span>
                 </div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-600 font-medium">{isRTL ? "تاريخ التوريد:" : "Supply Date:"}</span>
-                  <span className="text-gray-900">{formatDate(invoiceData.supply_date)}</span>
-                </div>
+
                 {invoiceData.customer_number && (
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 font-medium">{isRTL ? "رقم العميل:" : "Customer Number:"}</span>
-                    <span className="text-gray-900">{invoiceData.customer_number}</span>
+                  <div className="info-row">
+                    <span className="info-label">{isRTL ? "رقم العميل:" : "Customer Number:"}</span>
+                    <span className="info-value">{invoiceData.customer_number}</span>
                   </div>
                 )}
               </div>
@@ -198,73 +180,43 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
           </div>
 
           {/* Invoice Items Table */}
-          <div className="mb-6">
-            <div className="bg-purple-50 border-b border-purple-200 px-3 py-2 rounded-t">
-              <h3 className="text-sm font-bold text-gray-800">
+          <div className="items-section">
+            <div className="items-header">
+              <h3 className="items-title">
                 {isRTL ? "بنود الفاتورة • Invoice Items" : "Invoice Items • بنود الفاتورة"}
               </h3>
             </div>
-            <div className="border border-gray-200 rounded-b overflow-hidden">
-              <table className="w-full text-xs">
-                <thead className="bg-gray-100">
+            <div className="table-container">
+              <table className="items-table">
+                <thead className="table-header">
                   <tr>
-                    <th className="px-2 py-2 text-center font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "م" : "No."}
-                    </th>
-                    <th className="px-2 py-2 text-center font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "تاريخ التوريد" : "Supply Date"}
-                    </th>
-                    <th className="px-2 py-2 text-left font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "الوصف" : "Description"}
-                    </th>
-                    <th className="px-2 py-2 text-center font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "الكمية" : "Qty"}
-                    </th>
-                    <th className="px-2 py-2 text-right font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "سعر الوحدة" : "Unit Price"}
-                    </th>
-                    <th className="px-2 py-2 text-right font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "المجموع الفرعي" : "Subtotal"}
-                    </th>
-                    <th className="px-2 py-2 text-center font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "نسبة الضريبة" : "VAT Rate"}
-                    </th>
-                    <th className="px-2 py-2 text-right font-semibold text-gray-700 border-r border-gray-200">
-                      {isRTL ? "مبلغ الضريبة" : "VAT Amount"}
-                    </th>
-                    <th className="px-2 py-2 text-right font-semibold text-gray-700">
+                    <th className="table-cell table-header-cell text-center">{isRTL ? "م" : "No."}</th>
+                    <th className="table-cell table-header-cell text-left">{isRTL ? "الوصف" : "Description"}</th>
+                    <th className="table-cell table-header-cell text-center">{isRTL ? "الكمية" : "Qty"}</th>
+                    <th className="table-cell table-header-cell text-right">{isRTL ? "سعر الوحدة" : "Unit Price"}</th>
+                    <th className="table-cell table-header-cell text-right">{isRTL ? "المجموع الفرعي" : "Subtotal"}</th>
+                    <th className="table-cell table-header-cell text-center">{isRTL ? "نسبة الضريبة" : "VAT Rate"}</th>
+                    <th className="table-cell table-header-cell text-right">{isRTL ? "مبلغ الضريبة" : "VAT Amount"}</th>
+                    <th className="table-cell table-header-cell text-right no-border-right">
                       {isRTL ? "الإجمالي شامل الضريبة" : "Total Incl. VAT"}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {invoiceData.items.map((item, index) => (
-                    <tr
-                      key={index}
-                      className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"} border-b border-gray-200`}
-                    >
-                      <td className="px-2 py-2 text-center border-r border-gray-200">{item.serial}</td>
-                      <td className="px-2 py-2 text-center border-r border-gray-200">{formatDate(item.supply_date)}</td>
-                      <td className="px-2 py-2 border-r border-gray-200">
-                        <div className="space-y-1">
-                          <div className="font-medium text-gray-900">
-                            {isRTL ? item.description_ar : item.description}
-                          </div>
-                          <div className="text-gray-500 italic">{isRTL ? item.description : item.description_ar}</div>
+                    <tr key={index} className={`table-row ${index % 2 === 0 ? "table-row-even" : "table-row-odd"}`}>
+                      <td className="table-cell text-center">{index + 1}</td>
+                      <td className="table-cell">
+                        <div className="description-container">
+                          <div className="description-primary">{item.description}</div>
                         </div>
                       </td>
-                      <td className="px-2 py-2 text-center border-r border-gray-200">{item.quantity}</td>
-                      <td className="px-2 py-2 text-right font-mono border-r border-gray-200">
-                        {formatCurrency(item.unit_price)}
-                      </td>
-                      <td className="px-2 py-2 text-right font-mono border-r border-gray-200">
-                        {formatCurrency(item.subtotal)}
-                      </td>
-                      <td className="px-2 py-2 text-center border-r border-gray-200">{item.vat_rate}%</td>
-                      <td className="px-2 py-2 text-right font-mono border-r border-gray-200">
-                        {formatCurrency(item.vat_amount)}
-                      </td>
-                      <td className="px-2 py-2 text-right font-mono font-bold text-blue-600">
+                      <td className="table-cell text-center">{item.quantity}</td>
+                      <td className="table-cell text-right mono-font">{formatCurrency(item.unit_price)}</td>
+                      <td className="table-cell text-right mono-font">{formatCurrency(item.total_excl_vat)}</td>
+                      <td className="table-cell text-center">{item.vat_rate}%</td>
+                      <td className="table-cell text-right mono-font">{formatCurrency(item.vat_amount)}</td>
+                      <td className="table-cell text-right mono-font total-cell no-border-right">
                         {formatCurrency(item.total_incl_vat)}
                       </td>
                     </tr>
@@ -275,55 +227,56 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
           </div>
 
           {/* Summary and Bank Information */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            {/* Totals Summary */}
+          <div className="summary-grid">
+            {/* Empty space */}
             <div></div>
-            <div className="bg-gray-50 border border-gray-200 rounded">
-              <div className="bg-indigo-50 border-b border-indigo-200 px-3 py-2">
-                <h3 className="text-sm font-bold text-gray-800">
+            {/* Totals Summary */}
+            <div className="info-card">
+              <div className="info-card-header summary-header">
+                <h3 className="info-card-title">
                   {isRTL ? "ملخص المبالغ • Amount Summary" : "Amount Summary • ملخص المبالغ"}
                 </h3>
               </div>
-              <div className="p-3 space-y-2">
-                <div className="flex justify-between text-xs py-1 border-b border-gray-200">
-                  <span className="text-gray-600 font-medium">{isRTL ? "المجموع الفرعي:" : "Subtotal:"}</span>
-                  <span className="text-gray-900 font-mono">{formatCurrency(invoiceData.subtotal)}</span>
+              <div className="info-card-content">
+                <div className="summary-row">
+                  <span className="info-label">{isRTL ? "المجموع الفرعي:" : "Subtotal:"}</span>
+                  <span className="info-value mono-font">{formatCurrency(invoiceData.subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-xs py-1 border-b border-gray-200">
-                  <span className="text-gray-600 font-medium">
+                <div className="summary-row">
+                  <span className="info-label">
                     {isRTL ? "إجمالي ضريبة القيمة المضافة (15%):" : "Total VAT (15%):"}
                   </span>
-                  <span className="text-gray-900 font-mono">{formatCurrency(invoiceData.total_vat)}</span>
+                  <span className="info-value mono-font">{formatCurrency(invoiceData.total_vat)}</span>
                 </div>
-                <div className="flex justify-between text-sm py-2 bg-blue-50 rounded px-2 border border-blue-200">
-                  <span className="text-blue-800 font-bold">{isRTL ? "الإجمالي النهائي:" : "Grand Total:"}</span>
-                  <span className="text-blue-800 font-mono font-bold">{formatCurrency(invoiceData.grand_total)}</span>
+                <div className="grand-total-row">
+                  <span className="grand-total-label">{isRTL ? "الإجمالي النهائي:" : "Grand Total:"}</span>
+                  <span className="grand-total-value">{formatCurrency(invoiceData.grand_total)}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Bank Transfer Information */}
-          <div className="mb-6">
-            <div className="bg-yellow-50 border border-yellow-200 rounded">
-              <div className="bg-yellow-100 border-b border-yellow-200 px-3 py-2">
-                <h3 className="text-sm font-bold text-gray-800">
+          <div className="bank-section">
+            <div className="info-card bank-card">
+              <div className="info-card-header bank-header">
+                <h3 className="info-card-title">
                   {isRTL
                     ? "معلومات التحويل البنكي • Bank Transfer Information"
                     : "Bank Transfer Information • معلومات التحويل البنكي"}
                 </h3>
               </div>
-              <div className="p-3">
-                <div className="grid grid-cols-2 gap-4 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 font-medium">{isRTL ? "اسم البنك:" : "Bank Name:"}</span>
-                    <span className="text-gray-900 font-medium">{invoiceData.bank_name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 font-medium">{isRTL ? "رقم الآيبان:" : "IBAN:"}</span>
-                    <span className="text-gray-900 font-mono font-bold bg-yellow-200 px-2 py-1 rounded">
-                      {invoiceData.iban}
+              <div className="info-card-content">
+                <div className="bank-info-grid">
+                  <div className="info-row">
+                    <span className="info-label">{isRTL ? "اسم البنك:" : "Bank Name:"}</span>
+                    <span className="info-value bank-name">
+                      {invoiceData.company.bank_name || "Saudi National Bank"}
                     </span>
+                  </div>
+                  <div className="info-row">
+                    <span className="info-label">{isRTL ? "رقم الآيبان:" : "IBAN:"}</span>
+                    <span className="iban-value">{invoiceData.company.iban || "SA1234567890123456789012"}</span>
                   </div>
                 </div>
               </div>
@@ -331,36 +284,34 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
           </div>
 
           {/* Signature Section */}
-          <div className="grid grid-cols-2 gap-8 mb-4">
+          <div className="signature-grid">
             {/* General Manager Signature */}
-            <div className="text-center">
-              <div className="h-16 border-b border-gray-300 mb-2"></div>
-              <div className="text-xs space-y-1">
-                <div className="text-blue-600 font-bold">{invoiceData.approver_name}</div>
-                <div className="text-gray-600 font-medium">{isRTL ? "المدير العام" : invoiceData.approver_title}</div>
-                <div className="text-gray-500">{isRTL ? "التوقيع • Signature" : "Signature • التوقيع"}</div>
+            <div className="signature-section">
+              <div className="signature-line"></div>
+              <div className="signature-info">
+                <div className="signature-name">{invoiceData.approver_name}</div>
+                <div className="signature-title">{isRTL ? "المدير العام" : invoiceData.approver_title}</div>
+                <div className="signature-label">{isRTL ? "التوقيع • Signature" : "Signature • التوقيع"}</div>
               </div>
             </div>
 
             {/* Company Stamp */}
-            <div className="text-center">
-              <div className="h-16 flex items-center justify-center mb-2">
-                <div className="w-20 h-12 border border-dashed border-gray-300 rounded flex items-center justify-center bg-gray-50">
-                  <span className="text-gray-400 text-xs">{isRTL ? "ختم الشركة" : "Company Stamp"}</span>
+            <div className="signature-section">
+              <div className="stamp-container">
+                <div className="stamp-placeholder">
+                  <span className="stamp-text">{isRTL ? "ختم الشركة" : "Company Stamp"}</span>
                 </div>
               </div>
-              <div className="text-xs space-y-1">
-                <div className="text-gray-600 font-medium">
-                  {isRTL ? "ختم الشركة الرسمي" : "Official Company Stamp"}
-                </div>
-                <div className="text-gray-500">{isRTL ? "الختم • Stamp" : "Stamp • الختم"}</div>
+              <div className="signature-info">
+                <div className="signature-title">{isRTL ? "ختم الشركة الرسمي" : "Official Company Stamp"}</div>
+                <div className="signature-label">{isRTL ? "الختم • Stamp" : "Stamp • الختم"}</div>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="text-center border-t border-gray-200 pt-2">
-            <p className="text-xs text-gray-500 italic">
+          <div className="invoice-footer">
+            <p className="footer-text">
               {isRTL
                 ? "هذه فاتورة ضريبية صادرة إلكترونياً وفقاً لأنظمة هيئة الزكاة والضريبة والجمارك"
                 : "This is an electronically issued tax invoice in accordance with ZATCA regulations"}
