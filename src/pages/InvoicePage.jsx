@@ -194,11 +194,11 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
                   </div>
                 )}
                 {invoiceData.client.vat_registration && (
-                  <div className="flex justify-between text-xs">
-                    <span className="text-gray-600 font-medium">
+                  <div className="info-row">
+                    <span className="info-label">
                       {isRTL ? "تسجيل ضريبة القيمة المضافة:" : "VAT Registration:"}
                     </span>
-                    <span className="text-gray-900">{invoiceData.client.vat_registration}</span>
+                    <span className="info-value">{invoiceData.client.vat_registration}</span>
                   </div>
                 )}
               </div>
@@ -365,8 +365,8 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
           <div className="invoice-footer">
             <p className="footer-text">
               {isRTL
-                ? "هذه فاتورة ضريبية صادرة إلكترونياً وفقاً لأنظمة هيئة الزكاة والضريبة والجمارك"
-                : "This is an electronically issued tax invoice in accordance with ZATCA regulations"}
+                ? "هذه فاتورة ضريبية صادرة إلكترونيًا وفقًا للوائح شركة العطيشان للاستشارات الهندسية"
+                : "This is an electronically issued tax invoice in accordance with Al Otaishan Consulting Engeering regulations"}
             </p>
           </div>
         </div>
@@ -374,3 +374,8 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
     </div>
   )
 }
+
+
+
+//هذه فاتورة ضريبية صادرة إلكترونيًا وفقًا للوائح شركة العطيشان للاستشارات الهندسية
+
