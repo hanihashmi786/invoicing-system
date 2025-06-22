@@ -25,7 +25,7 @@ const translations = {
     fax: "Fax",
     bank_name: "Bank Name",
     iban: "IBAN",
-    tax_number: "Tax Number",
+    tax_number: "VAT",
     project: "Project",
     no_project: "No Project",
     new_project: "New Project",
@@ -39,6 +39,7 @@ const translations = {
     quantity: "Qty",
     unit_price: "Unit Price",
     vat_rate: "VAT %",
+    vat_amount: "VAT Amount",
     total_with_vat: "Total (with VAT)",
     add_item: "Add Item",
     subtotal: "Subtotal",
@@ -77,6 +78,7 @@ const translations = {
     quantity: "الكمية",
     unit_price: "سعر الوحدة",
     vat_rate: "نسبة الضريبة",
+    vat_amount: "مبلغ الضريبة",
     total_with_vat: "الإجمالي مع الضريبة",
     add_item: "إضافة بند",
     subtotal: "المجموع الفرعي",
@@ -90,10 +92,10 @@ const translations = {
 }
 
 const initialForm = {
-  company_name: "",
-  company_address: "",
-  company_phone: "",
-  company_email: "",
+  company_name: "Abdulaziz Turki Abdullah Al-Otaishan",
+  company_address: "Riyadh - Prince Sultan Bin Abdulaziz St.",
+  company_phone: "966 11 465 2841",
+  company_email: "oce@otaishan.com.sa",
   bank_name: "",
   iban: "",
   tax_number: "",
@@ -197,51 +199,6 @@ export default function InvoiceForm({ onSubmit }) {
     }
   }
 
-  const handlePreview = () => {
-    const items = form.items.map((item) => {
-      const total_excl_vat = Number((item.unit_price * item.quantity).toFixed(2))
-      const vat_amount = Number((total_excl_vat * (item.vat_rate / 100)).toFixed(2))
-      const total_incl_vat = Number((total_excl_vat + vat_amount).toFixed(2))
-      return { ...item, total_excl_vat, vat_amount, total_incl_vat }
-    })
-
-    const subtotal = Number(items.reduce((sum, item) => sum + item.total_excl_vat, 0).toFixed(2))
-    const total_vat = Number(items.reduce((sum, item) => sum + item.vat_amount, 0).toFixed(2))
-    const grand_total = Number((subtotal + total_vat).toFixed(2))
-
-    const previewData = {
-      invoice_number: form.invoice_number,
-      invoice_date: form.invoice_date,
-      customer_number: form.customer_number,
-      approver_name: "Dr. Abdul Aziz Turki Al-Otaishan",
-      approver_title: "General Manager",
-      subtotal,
-      total_vat,
-      grand_total,
-      company: {
-        name: form.company_name,
-        address: form.company_address,
-        phone: form.company_phone,
-        email: form.company_email,
-        bank_name: form.bank_name,
-        iban: form.iban,
-        tax_number: form.tax_number,
-      },
-      client: {
-        name: form.client_name,
-        address: form.client_address,
-        phone: form.client_phone,
-        fax: form.client_fax,
-        email: form.client_email,
-        vat_registration: form.client_vat_registration,  
-      },
-      items,
-    }
-
-    setInvoiceData(previewData)
-    setShowPreview(true)
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -334,7 +291,6 @@ export default function InvoiceForm({ onSubmit }) {
   }
 
   const totals = calculateTotals()
-
 
   return (
     <div className={`invoice-form-container ${lang === "ar" ? "rtl" : "ltr"}`} dir={lang === "ar" ? "rtl" : "ltr"}>
@@ -442,26 +398,7 @@ export default function InvoiceForm({ onSubmit }) {
                     className="form-input"
                   />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">{t.approver_name}</label>
-                  <input
-                    type="text"
-                    name="approver_name"
-                    value="Dr. Abdul Aziz Turki Al-Otaishan"
-                    readOnly
-                    className="form-input readonly"
-                  />
-                </div>
-                <div className="form-group span-2">
-                  <label className="form-label">{t.approver_title}</label>
-                  <input
-                    type="text"
-                    name="approver_title"
-                    value="General Manager"
-                    readOnly
-                    className="form-input readonly"
-                  />
-                </div>
+                {/* Hidden approver fields - completely removed from display */}
               </div>
             </div>
           </div>
@@ -485,7 +422,7 @@ export default function InvoiceForm({ onSubmit }) {
                     name="company_name"
                     value={form.company_name}
                     onChange={handleChange}
-                    placeholder={t.name}
+                    placeholder="Abdulaziz Turki Abdullah Al-Otaishan Engineering Consulting Co."
                     className="form-input"
                     required
                   />
@@ -631,13 +568,13 @@ export default function InvoiceForm({ onSubmit }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">VAT Registration</label>
+                  <label className="form-label">VAT</label>
                   <input
                     type="text"
                     name="client_vat_registration"
                     value={form.client_vat_registration}
                     onChange={handleChange}
-                    placeholder="VAT Registration Number"
+                    placeholder="VAT Number"
                     className="form-input"
                   />
                 </div>
@@ -660,6 +597,7 @@ export default function InvoiceForm({ onSubmit }) {
                     <th>{t.quantity}</th>
                     <th>{t.unit_price}</th>
                     <th>{t.vat_rate}</th>
+                    <th>{t.vat_amount}</th>
                     <th>{t.total_with_vat}</th>
                     <th>Action</th>
                   </tr>
@@ -716,6 +654,7 @@ export default function InvoiceForm({ onSubmit }) {
                             required
                           />
                         </td>
+                        <td className="total-cell">{vat_amount.toFixed(2)}</td>
                         <td className="total-cell">{total_incl_vat.toFixed(2)}</td>
                         <td className="action-cell">
                           {form.items.length > 1 && (
@@ -765,9 +704,6 @@ export default function InvoiceForm({ onSubmit }) {
         <div className="form-card actions-card">
           <div className="card-content">
             <div className="actions-container">
-              <button type="button" onClick={handlePreview} className="btn btn-outline btn-large">
-                👁️ {t.preview_invoice}
-              </button>
               <button type="submit" disabled={loading} className="btn btn-primary btn-large">
                 {loading ? `⏳ ${t.saving}` : `✓ ${t.generate_invoice}`}
               </button>

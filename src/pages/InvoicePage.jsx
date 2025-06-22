@@ -114,14 +114,14 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
                 <h1 className="company-name">{invoiceData.company.name}</h1>
                 <p className="company-subtitle">Engineering Consulting Co.</p>
                 <div className="company-info">
-                  <p>Riyadh, Saudi Arabia</p>
-                  <p>P.O. Box 12345</p>
+                  <p>{invoiceData.company.address}</p>
+                  <p>P.O. 62696 Riyadh 11595 KSA</p>
                   <p>{invoiceData.company.phone}</p>
                   <p>{invoiceData.company.email}</p>
                 </div>
                 <div className="company-registration">
-                  <p>CR: {invoiceData.company.cr_number || "1010000000"}</p>
-                  <p>License: {invoiceData.company.license_number || "40030000"}</p>
+                  <p>CR: {invoiceData.company.cr_number || "1010691625"}</p>
+                  <p>License: {invoiceData.company.license_number || "5100001331"}</p>
                   <p>CC: 625262</p>
                 </div>
               </div>
@@ -135,17 +135,17 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
 
               {/* Right Column - Arabic Company Details */}
               <div className="company-details-right">
-                <h1 className="company-name">{invoiceData.company.name_ar || "للاستشارات الهندسية"}</h1>
+                <h1 className="company-name">{invoiceData.company.name_ar || "عبدالعزيز تركي عبدالله العطيشان"}</h1>
                 <p className="company-subtitle">للاستشارات الهندسية</p>
                 <div className="company-info">
                   <p>الرياض، المملكة العربية السعودية</p>
-                  <p>ص.ب ١٢٣٤٥</p>
+                  <p>ص.ب 62696</p>
                   <p>{invoiceData.company.phone}</p>
                   <p>{invoiceData.company.email}</p>
                 </div>
                 <div className="company-registration">
-                  <p>س.ت: {invoiceData.company.cr_number || "1010000000"}</p>
-                  <p>ترخيص: {invoiceData.company.license_number || "40030000"}</p>
+                  <p>س.ت: {invoiceData.company.cr_number || "1010691625"}</p>
+                  <p>ترخيص: {invoiceData.company.license_number || "5100001331"}</p>
                   <p>غرفة: 625262</p>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
                 {invoiceData.client.vat_registration && (
                   <div className="info-row">
                     <span className="info-label">
-                      {isRTL ? "تسجيل ضريبة القيمة المضافة:" : "VAT Registration:"}
+                      {isRTL ? "تسجيل ضريبة القيمة المضافة:" : "VAT No."}
                     </span>
                     <span className="info-value">{invoiceData.client.vat_registration}</span>
                   </div>
