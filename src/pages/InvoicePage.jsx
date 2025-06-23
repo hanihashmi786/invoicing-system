@@ -114,8 +114,8 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
                 <h1 className="company-name">{invoiceData.company.name}</h1>
                 <p className="company-subtitle">Engineering Consulting Co.</p>
                 <div className="company-info">
-                  <p>{invoiceData.company.address}</p>
-                  <p>P.O. 62696 Riyadh 11595 KSA</p>
+                  <p>Riyadh, Saudi Arabia</p>
+                  <p>P.O. Box 12345</p>
                   <p>{invoiceData.company.phone}</p>
                   <p>{invoiceData.company.email}</p>
                 </div>
@@ -196,7 +196,7 @@ export default function InvoicePage({ invoiceData, language = "en" }) {
                 {invoiceData.client.vat_registration && (
                   <div className="info-row">
                     <span className="info-label">
-                      {isRTL ? "تسجيل ضريبة القيمة المضافة:" : "VAT No."}
+                      {isRTL ? "تسجيل ضريبة القيمة المضافة:" : "VAT"}
                     </span>
                     <span className="info-value">{invoiceData.client.vat_registration}</span>
                   </div>

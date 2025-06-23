@@ -464,7 +464,7 @@
 
 .items-table {
   width: 100%;
-  font-size: 0.65rem; /* Reduced from 0.7rem */
+  font-size: 0.55rem; /* Reduced from 0.65rem */
   border-collapse: collapse;
 }
 
@@ -473,7 +473,7 @@
 }
 
 .table-header-cell {
-  padding: 0.3rem; /* Reduced from 0.4rem */
+  padding: 0.2rem; /* Reduced from 0.3rem */
   font-weight: 600;
   color: #374151;
   border-right: 1px solid #e5e7eb;
@@ -496,12 +496,12 @@
 }
 
 .table-cell {
-  padding: 0.3rem; /* Reduced from 0.4rem */
+  padding: 0.2rem; /* Reduced from 0.4rem */
   border-right: 1px solid #e5e7eb;
 }
 
 .description-container {
-  line-height: 1.4;
+  line-height: 1.2;
 }
 
 .description-primary {
